@@ -305,7 +305,8 @@
     const q = new URLSearchParams(location.search);
     const force = q.has('intro');
     const slow = Math.max(1, Number(q.get('slow')) || 1);   // ?slow=4 — замедлить вчетверо
-    try { if (!force && sessionStorage.getItem('fk-hero-intro') === '1') { startParallax(); return; } } catch {}
+    // Правка заказчика 12.10.2026: вступление проигрывается при каждой загрузке страницы (раньше — один раз за сессию вкладки,
+    // по метке в sessionStorage; метку больше не читаем и не пишем)
 
     if (hero.dataset.introRan) { startParallax(); return; }
     // страница открыта не сверху — вступлению тут не место
@@ -434,7 +435,6 @@
       Promise.all(anims.map(a => a.finished)).then(finish).catch(finish);
       setTimeout(finish, total + 2000);   // страховка
 
-      try { sessionStorage.setItem('fk-hero-intro', '1'); } catch {}
     };
 
     try { run(); } catch (e) { hero.removeAttribute('data-intro'); }
